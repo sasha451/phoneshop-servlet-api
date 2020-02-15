@@ -1,6 +1,8 @@
 package com.es.phoneshop.web;
 
-import com.es.phoneshop.model.product.ArrayListProductDao;
+import com.es.phoneshop.dao.impl.ArrayListProductDao;
+import com.es.phoneshop.model.enums.SortField;
+import com.es.phoneshop.model.enums.SortOrder;
 import com.es.phoneshop.model.product.Product;
 import org.junit.Before;
 import org.junit.Test;
@@ -35,21 +37,36 @@ public class ProductListPageServletTest {
     @Mock
     private Product product2;
 
+    private static final SortOrder SORT_ORDER = SortOrder.ASC;
+    private static final SortField SORT_FIELD = SortField.PRICE;
+
     @InjectMocks
     private ProductListPageServlet servlet = new ProductListPageServlet();
 
     @Before
     public void setup() {
         when(request.getRequestDispatcher(anyString())).thenReturn(requestDispatcher);
-        when(productDao.findProducts()).thenReturn(Arrays.asList(product1, product2));
+        when(productDao.findProducts(null, null, null)).thenReturn(Arrays.asList(product1, product2));
     }
 
     @Test
     public void testDoGet() throws ServletException, IOException {
         servlet.doGet(request, response);
 
-        verify(productDao).findProducts();
-        verify(request).setAttribute("products", productDao.findProducts());
+        verify(productDao).findProducts(null, null, null);
+        verify(request).setAttribute("products", productDao.findProducts(null, null, null));
+        verify(requestDispatcher).forward(request, response);
+    }
+
+    @Test
+    public void testDoGetWithProductsSorting() throws ServletException, IOException {
+        when(request.getParameter("sortField")).thenReturn("price");
+        when(request.getParameter("sortOrder")).thenReturn("asc");
+
+        servlet.doGet(request, response);
+
+        verify(productDao).findProducts(null, SORT_FIELD, SORT_ORDER);
+        verify(request).setAttribute("products", productDao.findProducts(null, SORT_FIELD, SORT_ORDER));
         verify(requestDispatcher).forward(request, response);
     }
 }
