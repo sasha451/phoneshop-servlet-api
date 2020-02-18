@@ -2,22 +2,30 @@ package com.es.phoneshop.model.product;
 
 import java.math.BigDecimal;
 import java.util.Currency;
+import java.util.GregorianCalendar;
+import java.util.List;
 
 public class Product {
     private Long id;
     private String code;
     private String description;
-    /** null means there is no price because the product is outdated or new */
+    /**
+     * null means there is no price because the product is outdated or new
+     */
     private BigDecimal price;
-    /** can be null if the price is null */
+    /**
+     * can be null if the price is null
+     */
     private Currency currency;
     private int stock;
     private String imageUrl;
+    private List<ProductPriceHistory> priceHistoryList;
 
     public Product() {
     }
 
-    public Product(Long id, String code, String description, BigDecimal price, Currency currency, int stock, String imageUrl) {
+    public Product(Long id, String code, String description, BigDecimal price, Currency currency, int stock,
+                   String imageUrl, List<ProductPriceHistory> productPriceHistoryList) {
         this.id = id;
         this.code = code;
         this.description = description;
@@ -25,6 +33,7 @@ public class Product {
         this.currency = currency;
         this.stock = stock;
         this.imageUrl = imageUrl;
+        this.priceHistoryList = productPriceHistoryList;
     }
 
     public Long getId() {
@@ -57,6 +66,7 @@ public class Product {
 
     public void setPrice(BigDecimal price) {
         this.price = price;
+        priceHistoryList.add(new ProductPriceHistory(new GregorianCalendar(), price));
     }
 
     public Currency getCurrency() {
@@ -81,5 +91,13 @@ public class Product {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public List<ProductPriceHistory> getPriceHistoryList() {
+        return priceHistoryList;
+    }
+
+    public void setPriceHistoryList(List<ProductPriceHistory> priceHistoryList) {
+        this.priceHistoryList = priceHistoryList;
     }
 }
