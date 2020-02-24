@@ -4,6 +4,8 @@ import com.es.phoneshop.dao.impl.ArrayListProductDao;
 import com.es.phoneshop.model.enums.SortField;
 import com.es.phoneshop.model.enums.SortOrder;
 import com.es.phoneshop.model.product.Product;
+import com.es.phoneshop.model.recentlyViewedProducts.RecentlyViewedProducts;
+import com.es.phoneshop.dao.RecentlyViewedProductsService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,6 +19,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.concurrent.ConcurrentLinkedDeque;
 
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
@@ -36,6 +40,10 @@ public class ProductListPageServletTest {
     private Product product1;
     @Mock
     private Product product2;
+    @Mock
+    RecentlyViewedProductsService recentlyViewedProductsService;
+    @Mock
+    RecentlyViewedProducts recentlyViewedProducts;
 
     private static final SortOrder SORT_ORDER = SortOrder.ASC;
     private static final SortField SORT_FIELD = SortField.PRICE;
@@ -46,7 +54,11 @@ public class ProductListPageServletTest {
     @Before
     public void setup() {
         when(request.getRequestDispatcher(anyString())).thenReturn(requestDispatcher);
-        when(productDao.findProducts(null, null, null)).thenReturn(Arrays.asList(product1, product2));
+        when(productDao.findProducts(null, null, null))
+                .thenReturn(Arrays.asList(product1, product2));
+        when(recentlyViewedProductsService.getRecentlyViewedProducts(request)).thenReturn(recentlyViewedProducts);
+        when(recentlyViewedProductsService.getRecentlyViewedProducts(request).getRecentlyViewedProducts()).
+                thenReturn(new ConcurrentLinkedDeque<>(Collections.singletonList(product1)));
     }
 
     @Test
@@ -54,7 +66,10 @@ public class ProductListPageServletTest {
         servlet.doGet(request, response);
 
         verify(productDao).findProducts(null, null, null);
-        verify(request).setAttribute("products", productDao.findProducts(null, null, null));
+        verify(request).setAttribute("recentProducts", recentlyViewedProductsService
+                .getRecentlyViewedProducts(request).getRecentlyViewedProducts());
+        verify(request).setAttribute("products", productDao
+                .findProducts(null, null, null));
         verify(requestDispatcher).forward(request, response);
     }
 
@@ -66,6 +81,8 @@ public class ProductListPageServletTest {
         servlet.doGet(request, response);
 
         verify(productDao).findProducts(null, SORT_FIELD, SORT_ORDER);
+        verify(request).setAttribute("recentProducts", recentlyViewedProductsService
+                .getRecentlyViewedProducts(request).getRecentlyViewedProducts());
         verify(request).setAttribute("products", productDao.findProducts(null, SORT_FIELD, SORT_ORDER));
         verify(requestDispatcher).forward(request, response);
     }
