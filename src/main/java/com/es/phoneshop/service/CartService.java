@@ -1,4 +1,4 @@
-package com.es.phoneshop.dao;
+package com.es.phoneshop.service;
 
 import com.es.phoneshop.model.cart.Cart;
 
@@ -8,4 +8,8 @@ public interface CartService {
     void add(Cart cart, Long productId, int quantity);
 
     Cart getCart(HttpServletRequest request);
+
+    void update(Cart cart, long productId, int quantity);
+
+    void delete(Cart cart, Long productId);
 }

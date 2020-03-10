@@ -1,20 +1,22 @@
 package com.es.phoneshop.model.cart;
 
+import com.es.phoneshop.model.product.Product;
+
 public class CartItem {
-    private Long productId;
+    private Product product;
     private int quantity;
 
-    public CartItem(Long productId, int quantity) {
-        this.productId = productId;
+    public CartItem(Product product, int quantity) {
+        this.product = product;
         this.quantity = quantity;
     }
 
-    public Long getProductId() {
-        return productId;
+    public Product getProduct() {
+        return product;
     }
 
-    public void setProductId(Long productId) {
-        this.productId = productId;
+    public void setProduct(Product product) {
+        this.product = product;
     }
 
     public int getQuantity() {

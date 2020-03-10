@@ -5,7 +5,7 @@ import com.es.phoneshop.model.enums.SortField;
 import com.es.phoneshop.model.enums.SortOrder;
 import com.es.phoneshop.model.product.Product;
 import com.es.phoneshop.model.recentlyViewedProducts.RecentlyViewedProducts;
-import com.es.phoneshop.dao.RecentlyViewedProductsService;
+import com.es.phoneshop.service.RecentlyViewedProductsService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

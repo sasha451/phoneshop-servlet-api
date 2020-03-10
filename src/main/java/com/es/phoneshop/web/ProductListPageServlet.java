@@ -4,8 +4,8 @@ import com.es.phoneshop.dao.ProductDao;
 import com.es.phoneshop.dao.impl.ArrayListProductDao;
 import com.es.phoneshop.model.enums.SortField;
 import com.es.phoneshop.model.enums.SortOrder;
-import com.es.phoneshop.dao.impl.DefaultRecentlyViewedProductsService;
-import com.es.phoneshop.dao.RecentlyViewedProductsService;
+import com.es.phoneshop.service.impl.DefaultRecentlyViewedProductsService;
+import com.es.phoneshop.service.RecentlyViewedProductsService;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
