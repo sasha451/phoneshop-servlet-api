@@ -55,9 +55,9 @@ public class ProductDetailPageServletTest {
     @Before
     public void setup() {
         when(request.getRequestDispatcher("/WEB-INF/pages/productDetails.jsp")).thenReturn(requestDispatcher);
-        when(productDao.getProduct(1L)).thenReturn(product1);
+        when(productDao.get(1L)).thenReturn(product1);
         when(request.getPathInfo()).thenReturn("/1");
-        when(productDao.getProduct(2L)).thenThrow(NoSuchElementException.class);
+        when(productDao.get(2L)).thenThrow(NoSuchElementException.class);
 
         when(cartService.getCart(request)).thenReturn(cart);
         when(request.getLocale()).thenReturn(Locale.UK);
@@ -71,8 +71,8 @@ public class ProductDetailPageServletTest {
     public void testDoGet() throws ServletException, IOException {
         servlet.doGet(request, response);
 
-        verify(productDao).getProduct(1L);
-        verify(request).setAttribute("product", productDao.getProduct(1L));
+        verify(productDao).get(1L);
+        verify(request).setAttribute("product", productDao.get(1L));
         verify(request).setAttribute("recentProducts", recentlyViewedProducts.getRecentlyViewedProducts());
         verify(requestDispatcher).forward(request, response);
     }
@@ -83,7 +83,7 @@ public class ProductDetailPageServletTest {
 
         servlet.doGet(request, response);
 
-        verify(productDao).getProduct(2L);
+        verify(productDao).get(2L);
         verify(response).sendError(404);
     }
 

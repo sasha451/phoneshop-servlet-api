@@ -73,8 +73,8 @@ public class DefaultCartServiceTest {
         when(cartItem1.getProduct()).thenReturn(product1);
         when(cartItem2.getProduct()).thenReturn(product2);
 
-        when(productDao.getProduct(1L)).thenReturn(product1);
-        when(productDao.getProduct(5L)).thenReturn(product5);
+        when(productDao.get(1L)).thenReturn(product1);
+        when(productDao.get(5L)).thenReturn(product5);
         when(product1.getStock()).thenReturn(100);
         when(product5.getStock()).thenReturn(30);
 

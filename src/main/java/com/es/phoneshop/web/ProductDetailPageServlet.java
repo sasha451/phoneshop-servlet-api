@@ -40,7 +40,7 @@ public class ProductDetailPageServlet extends HttpServlet {
                     recentlyViewedProductsService.getRecentlyViewedProducts(request);
             recentlyViewedProductsService.addProduct(productId, recentlyViewedProducts);
             request.setAttribute("recentProducts", recentlyViewedProducts.getRecentlyViewedProducts());
-            request.setAttribute("product", productDao.getProduct(productId));
+            request.setAttribute("product", productDao.get(productId));
             Cart cart = cartService.getCart(request);
             request.setAttribute("cart", cart);
             request.getRequestDispatcher("/WEB-INF/pages/productDetails.jsp").forward(request, response);

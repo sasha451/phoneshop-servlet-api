@@ -3,11 +3,10 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
 
-<jsp:useBean id="cart" type="com.es.phoneshop.model.cart.Cart" scope="request"/>
-<tags:master pageTitle="Cart">
-    <c:if test="${not empty cart.cartItems}">
+<jsp:useBean id="order" type="com.es.phoneshop.model.order.Order" scope="request"/>
+<tags:master pageTitle="Overview">
         <div>${param.message}</div>
-        <form method="post" action="cart">
+        <form method="get" action="products">
             <table>
                 <thead>
                 <tr>
@@ -21,12 +20,9 @@
                     <td>
                         Quantity
                     </td>
-                    <td>
-                        Action
-                    </td>
                 </tr>
                 </thead>
-                <c:forEach var="cartItem" items="${cart.cartItems}" varStatus="status">
+                <c:forEach var="cartItem" items="${order.cartItems}" varStatus="status">
 
                     <tr>
                         <td>
@@ -43,26 +39,54 @@
                             </a>
                         </td>
                         <td>
-                            <input name="quantity"
-                                   value="${not empty paramValues.quantity[status.index] ? paramValues.quantity[status.index] : cartItem.quantity}"
-                                   class="price">
-                            <input type="hidden" name="productId" value="${cartItem.product.id}">
-                            <br>
-                            <div class="error">${errors[cartItem.product.id]}</div>
-                        </td>
-                        <td>
-                            <button formaction="cart/deleteCartItem/${cartItem.product.id}">Delete</button>
+                                ${cartItem.quantity}
                         </td>
                     </tr>
                 </c:forEach>
+                <tr>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>
+                        Subtotal price:
+                    </td>
+                    <td>
+                            ${order.totalPrice}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Delivery costs:
+                    </td>
+                    <td>
+                            ${order.deliveryCosts}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Total price:
+                    </td>
+                    <td>
+                            ${order.totalPrice + order.deliveryCosts}
+                    </td>
+                </tr>
             </table>
-            <button>Update</button>
+            <br>
+            <p>
+                First name: ${order.firstName}
+            </p>
+            <p>
+                Last name: ${order.lastName}
+            </p>
+            <p>
+                Delivery date: ${order.deliveryDate}
+            </p>
+            <p>
+                Delivery address: ${order.deliveryAddress}
+            </p>
+            <p>
+                Payment method: ${order.paymentMethod}
+            </p>
+            <button formaction="/phoneshop-servlet-api/products">Continue shopping</button>
         </form>
-        <form method="get">
-            <button formaction="/phoneshop-servlet-api/checkout">Checkout</button>
-        </form>
-    </c:if>
-    <c:if test="${empty cart.cartItems}">
-        <h3>Cart is empty</h3>
-    </c:if>
 </tags:master>

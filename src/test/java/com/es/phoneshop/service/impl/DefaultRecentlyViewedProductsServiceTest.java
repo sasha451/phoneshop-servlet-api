@@ -61,8 +61,8 @@ public class DefaultRecentlyViewedProductsServiceTest {
         when(request.getSession()).thenReturn(httpSession);
         when(httpSession.getAttribute(RECENT_VIEWS_ATTRIBUTE)).thenReturn(null);
 
-        when(productDao.getProduct(1L)).thenReturn(product1);
-        when(productDao.getProduct(4L)).thenReturn(product4);
+        when(productDao.get(1L)).thenReturn(product1);
+        when(productDao.get(4L)).thenReturn(product4);
         when(recentlyViewedProducts.getRecentlyViewedProducts()).thenReturn(recentViewsProductList);
     }
 

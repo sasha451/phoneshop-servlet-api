@@ -39,9 +39,9 @@ public class ArrayListProductDaoTest {
         MockitoAnnotations.initMocks(this);
 
         productDao = ArrayListProductDao.getInstance();
-        productDao.getProductList().add(product1);
-        productDao.getProductList().add(product3);
-        productDao.getProductList().add(product4);
+        productDao.getItems().add(product1);
+        productDao.getItems().add(product3);
+        productDao.getItems().add(product4);
 
         when(product1.getId()).thenReturn(1L);
         when(product1.getPrice()).thenReturn(new BigDecimal(100));
@@ -63,22 +63,22 @@ public class ArrayListProductDaoTest {
 
     @After
     public void clearProductList() {
-        productDao.getProductList().clear();
+        productDao.getItems().clear();
     }
 
     @Test
     public void testGetProduct() {
-        assertEquals(product1.getId(), productDao.getProduct(1L).getId());
+        assertEquals(product1.getId(), productDao.get(1L).getId());
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testGetProductNullId() {
-        productDao.getProduct(null);
+        productDao.get(null);
     }
 
     @Test(expected = NoSuchElementException.class)
     public void testGetNonExistentProduct() {
-        productDao.getProduct(2L);
+        productDao.get(2L);
     }
 
     @Test
@@ -110,7 +110,7 @@ public class ArrayListProductDaoTest {
     @Test
     public void testSave() {
         productDao.save(product2);
-        assertTrue(productDao.getProductList().contains(product2));
+        assertTrue(productDao.getItems().contains(product2));
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -128,7 +128,7 @@ public class ArrayListProductDaoTest {
         productDao.delete(1L);
         productDao.delete(3L);
         productDao.delete(4L);
-        assertTrue(productDao.getProductList().isEmpty());
+        assertTrue(productDao.getItems().isEmpty());
     }
 
     @Test(expected = NoSuchElementException.class)
