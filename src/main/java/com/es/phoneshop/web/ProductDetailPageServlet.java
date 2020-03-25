@@ -4,11 +4,11 @@ import com.es.phoneshop.dao.ProductDao;
 import com.es.phoneshop.dao.impl.ArrayListProductDao;
 import com.es.phoneshop.exceptions.OutOfStockException;
 import com.es.phoneshop.model.cart.Cart;
-import com.es.phoneshop.dao.CartService;
-import com.es.phoneshop.dao.impl.DefaultCartService;
-import com.es.phoneshop.dao.impl.DefaultRecentlyViewedProductsService;
+import com.es.phoneshop.service.CartService;
+import com.es.phoneshop.service.impl.DefaultCartService;
+import com.es.phoneshop.service.impl.DefaultRecentlyViewedProductsService;
 import com.es.phoneshop.model.recentlyViewedProducts.RecentlyViewedProducts;
-import com.es.phoneshop.dao.RecentlyViewedProductsService;
+import com.es.phoneshop.service.RecentlyViewedProductsService;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
