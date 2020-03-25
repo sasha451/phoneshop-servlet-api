@@ -23,7 +23,7 @@ public class ProductPriceHistoryPageServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             Long productId = Long.valueOf(request.getPathInfo().substring(1));
-            request.setAttribute("product", productDao.getProduct(productId));
+            request.setAttribute("product", productDao.get(productId));
             request.getRequestDispatcher("/WEB-INF/pages/priceHistory.jsp").forward(request, response);
         } catch (NoSuchElementException | NumberFormatException e) {
             response.sendError(404);

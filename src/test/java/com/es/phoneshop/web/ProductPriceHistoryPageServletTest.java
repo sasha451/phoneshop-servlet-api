@@ -38,18 +38,18 @@ public class ProductPriceHistoryPageServletTest {
     @Before
     public void setup() {
         when(request.getRequestDispatcher("/WEB-INF/pages/priceHistory.jsp")).thenReturn(requestDispatcher);
-        when(productDao.getProduct(1L)).thenReturn(product1);
+        when(productDao.get(1L)).thenReturn(product1);
         when(request.getPathInfo()).thenReturn("/1");
 
-        when(productDao.getProduct(2L)).thenThrow(NoSuchElementException.class);
+        when(productDao.get(2L)).thenThrow(NoSuchElementException.class);
     }
 
     @Test
     public void testDoGet() throws ServletException, IOException {
         servlet.doGet(request, response);
 
-        verify(productDao).getProduct(1L);
-        verify(request).setAttribute("product", productDao.getProduct(1L));
+        verify(productDao).get(1L);
+        verify(request).setAttribute("product", productDao.get(1L));
         verify(requestDispatcher).forward(request, response);
     }
 
@@ -59,7 +59,7 @@ public class ProductPriceHistoryPageServletTest {
 
         servlet.doGet(request, response);
 
-        verify(productDao).getProduct(2L);
+        verify(productDao).get(2L);
         verify(response).sendError(404);
     }
 }

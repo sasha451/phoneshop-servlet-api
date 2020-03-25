@@ -36,14 +36,14 @@ public class DefaultCartService implements CartService {
             throw new IllegalArgumentException("Invalid quantity value");
         }
         int quantityInCartItem = getCurrentCartItemById(productId, cart).map(CartItem::getQuantity).orElse(0);
-        if (productDao.getProduct(productId).getStock() < quantityInCartItem + quantity) {
+        if (productDao.get(productId).getStock() < quantityInCartItem + quantity) {
             throw new OutOfStockException("Not enough stock! Available " +
-                    (productDao.getProduct(productId).getStock() - quantityInCartItem));
+                    (productDao.get(productId).getStock() - quantityInCartItem));
         }
         getCurrentCartItemById(productId, cart).ifPresentOrElse(cartItem -> {
             cartItem.setQuantity(quantityInCartItem + quantity);
         }, () -> {
-            cart.getCartItems().add(new CartItem(productDao.getProduct(productId), quantity));
+            cart.getCartItems().add(new CartItem(productDao.get(productId), quantity));
         });
 
         recalculateCartTotalPrice(cart);
@@ -62,7 +62,7 @@ public class DefaultCartService implements CartService {
 
     @Override
     public void update(Cart cart, long productId, int quantity) {
-        Product product = productDao.getProduct(productId);
+        Product product = productDao.get(productId);
         if (product.getStock() < quantity) {
             throw new OutOfStockException("Not enough stock! Available " + product.getStock());
         }
@@ -76,7 +76,7 @@ public class DefaultCartService implements CartService {
 
     @Override
     public void delete(Cart cart, Long productId) {
-        Product product = productDao.getProduct(productId);
+        Product product = productDao.get(productId);
         Optional<CartItem> cartItemOptional = getCurrentCartItemById(productId, cart);
         cartItemOptional.ifPresent(cartItem -> cart.getCartItems().remove(cartItem));
         recalculateCartTotalPrice(cart);

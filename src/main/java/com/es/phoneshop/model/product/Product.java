@@ -1,12 +1,14 @@
 package com.es.phoneshop.model.product;
 
+import com.es.phoneshop.model.item.Item;
+
 import java.math.BigDecimal;
 import java.util.Currency;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-public class Product {
-    private Long id;
+public class Product extends Item {
+
     private String code;
     private String description;
     /**
@@ -34,14 +36,6 @@ public class Product {
         this.stock = stock;
         this.imageUrl = imageUrl;
         this.priceHistoryList = productPriceHistoryList;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getCode() {

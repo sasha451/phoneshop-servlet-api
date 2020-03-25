@@ -42,7 +42,7 @@ public class DefaultRecentlyViewedProductsService implements RecentlyViewedProdu
 
     @Override
     public void addProduct(Long productId, RecentlyViewedProducts recentlyViewedProducts) {
-        Product product = productDao.getProduct(productId);
+        Product product = productDao.get(productId);
         Deque<Product> recentViewsProductList = recentlyViewedProducts.getRecentlyViewedProducts();
 
         Optional<Product> productOptional = recentViewsProductList.stream()
