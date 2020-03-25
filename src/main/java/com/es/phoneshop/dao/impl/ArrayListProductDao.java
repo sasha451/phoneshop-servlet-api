@@ -1,10 +1,12 @@
 package com.es.phoneshop.dao.impl;
 
+import com.es.phoneshop.model.enums.AdvancedSearchOption;
 import com.es.phoneshop.model.enums.SortField;
 import com.es.phoneshop.model.enums.SortOrder;
 import com.es.phoneshop.model.product.Product;
 import com.es.phoneshop.dao.ProductDao;
 
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -20,6 +22,67 @@ public class ArrayListProductDao extends AbstractDao<Product> implements Product
 
     private static class Holder {
         private static final ArrayListProductDao instance = new ArrayListProductDao();
+    }
+
+    private List<Product> advancedSearchByDescriptionAllWords(String descriptionField) {
+        return items.stream()
+                .filter(item -> item.getDescription().equals(descriptionField))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Product> advancedSearch(String descriptionField, BigDecimal minPrice, BigDecimal maxPrice, AdvancedSearchOption advancedSearchOption) {
+        if (descriptionField == null && minPrice == null && maxPrice == null) {
+            return new ArrayList<>();
+        }
+        else {
+            if (advancedSearchOption != null && advancedSearchOption.equals(AdvancedSearchOption.ANY_WORD) && descriptionField != null
+                    && maxPrice == null && minPrice == null) {
+                return querySearch(descriptionField);
+            }
+        }
+        if (advancedSearchOption != null && advancedSearchOption.equals(AdvancedSearchOption.ALL_WORDS) && descriptionField != null
+                && maxPrice == null && minPrice == null) {
+            return advancedSearchByDescriptionAllWords(descriptionField);
+        }
+        else if (descriptionField == null && maxPrice == null) {
+            return advancedSearchByMinPrice(minPrice);
+        } else if (descriptionField == null && minPrice == null) {
+            return advancedSearchByMaxPrice(maxPrice);
+        }
+        if (descriptionField != null && advancedSearchOption != null
+                && advancedSearchOption.equals(AdvancedSearchOption.ANY_WORD)) {
+            return advancedSearchAllFieldsAnyWord(descriptionField, maxPrice, minPrice);
+        }
+       return advancedSearchAllFieldsAllWords(descriptionField, maxPrice, minPrice);
+    }
+
+    private List<Product> advancedSearchAllFieldsAllWords(String description, BigDecimal maxPrice,
+                                                          BigDecimal minPrice) {
+        return items.stream()
+                .filter(item -> item.getDescription().equals(description))
+                .filter(item -> item.getPrice().compareTo(minPrice) > 0)
+                .filter(item -> item.getPrice().compareTo(maxPrice) < 0)
+                .collect(Collectors.toList());
+    }
+    private List<Product> advancedSearchAllFieldsAnyWord(String description, BigDecimal maxPrice,
+                                                          BigDecimal minPrice) {
+        return querySearch(description).stream()
+                .filter(item -> item.getPrice().compareTo(minPrice) > 0)
+                .filter(item -> item.getPrice().compareTo(maxPrice) < 0)
+                .collect(Collectors.toList());
+    }
+
+    private List<Product> advancedSearchByMinPrice(BigDecimal minPrice) {
+        return items.stream()
+                .filter(item -> item.getPrice().compareTo(minPrice) > 0)
+                .collect(Collectors.toList());
+    }
+
+    private List<Product> advancedSearchByMaxPrice(BigDecimal maxPrice) {
+        return items.stream()
+                .filter(item -> item.getPrice().compareTo(maxPrice) < 0)
+                .collect(Collectors.toList());
     }
 
     private List<Product> defaultSearch() {
